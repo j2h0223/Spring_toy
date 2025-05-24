@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>join Page</title>
+</head>
+<body>
+
+<h1>join Page</h1>
+
+<form action="/member/register" method="post">
+	id : <input type="text" name="accountName"><br>
+	password : <input type="password" name="password"><br>
+	nickname : <input type="text" name="nickname"><br>
+	email : <input type="email" name="email"><br>
+	gender : <input type="radio" value="M" name="gender"> 남 <input type="radio" value="F" name="gender"> 여 <br>
+	birth : <input type="date" name="birth"><br>
+	phone : <input type="text" name="phone"><br>
+	<button>register</button>
+</form>
+
+
+</body>
+</html>

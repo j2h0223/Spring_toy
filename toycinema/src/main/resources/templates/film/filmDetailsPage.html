@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	
+	<meta charset="UTF-8">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+	      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+	
+	<title>viewFilmDetails</title>
+	
+</head>
+<body>
+
+
+<div class="container-fluid overflow-auto" style="max-width: 800px">
+	
+	<!-- 네비 바 -->
+	<div th:replace="~{common/topnavibar::topNaviBar}"></div>
+	
+	<div class="row">
+		<!-- col main -->
+		<div class="col">
+			<div class="row mt-4">
+				<!-- row 사진 - 정보 -->
+				<div class="col-auto me-2">
+					<div class="row">
+						<div class="col">
+							<img class="img-fluid" th:src="|/public/img/poster/${filmInfo['filmDto'].filmName}.webp|"
+							     style="max-width: 250px; max-height: 400px; min-width: 250px; min-height: 400px;">
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="col" style="max-height: 450px;">
+					<!-- 제목 -->
+					<div class="row">
+						<div class="col fw-bold" style="font-size: 2em">
+							<span th:text="${filmInfo['filmDto'].filmName}"></span>
+						</div>
+					</div>
+					
+					<!-- 개봉일 / 시간 / 관람가 -->
+					<div class="row mt-2">
+						<div class="col-auto me-1 pe-0 fw-bold" style="font-size: 1em">
+							<span th:text="${filmInfo['filmDto'].openingDay}"></span> 개봉
+						</div>
+						<div class="col-auto mx-1 px-0">|</div>
+						<div class="col-auto mx-1 px-0">
+							<i class="bi bi-clock"></i>
+							<span th:text="${filmInfo['filmDto'].runningTime}"></span>
+						</div>
+						<div class="col-auto mx-1 px-0">|</div>
+						<div class="col-auto mx-1 px-0">
+							<span th:text="${filmInfo['filmDto'].filmRating}"></span>세 이상 관람가
+						</div>
+					</div>
+					
+					<!-- 예고편 / 하트 / 공유 -->
+					<div class="row mt-3">
+						<div class="col-auto border border-1 rounded ms-3">
+							<div class="row">
+								<div class="col">
+									<a href="https://youtu.be/D4eJx-0g3Do" target="_blank"
+									   style="color: black; text-decoration: none">
+										<span><i class="bi bi-play-fill"></i></span> 예고편 재생
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="col-auto border border-1 rounded ms-2">
+							<div class="div">
+								<div class="col">
+									<span><i class="bi bi-heart"></i></span> 3243
+								</div>
+							</div>
+						</div>
+						<div class="col-auto border border-1 rounded ms-2">
+							<div class="div">
+								<div class="col">
+									공유
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- 줄거리 -->
+					<div class="row mt-3 ps-1">
+						<div class="col-auto overflow-y-scroll">
+							<span th:text="${filmInfo['filmDto'].story}"></span>
+						</div>
+					</div>
+					
+					<!-- 예매하기 -->
+					<div class="row mt-3 ps-1">
+						<div class="col-auto">
+							<button class="btn btn-danger">예매하기</button>
+						</div>
+					</div>
+					
+					<div class="row"></div>
+				</div>
+			
+			</div>
+		</div>
+	</div>
+	
+	<div class="row mt-5">
+		<div class="col pe-0 border-2">
+			<a th:href="@{/film/filmDetailsPage/{id}(id=${filmInfo['filmDto'].id})}"
+			   class="text-center form-control rounded-0 border-0 border-bottom border-end"
+			   style="color: black; text-decoration: none">
+				상세정보
+			</a>
+		</div>
+		<div class="col ps-0 border-2">
+			<form th:action="@{/film/filmDetailsPage/{id}(id=${filmInfo['filmDto'].id})}" method="get">
+				<input type="hidden" name="comments" value="ture">
+				<input type="submit" value="관람평 (200)"
+				       class="text-center form-control rounded-0 border-0 border-bottom border-end">
+			</form>
+		</div>
+	</div>
+	
+	<div th:if="${string}" class="row mt-2">
+		<div class="col">
+			관람평
+			
+			<div class="row" th:if="${session.memberLoginInfo != null}">
+				<div class="col">
+					<div class="row">
+						<div class="col">영화 관람 후 평점/관람평 작성시 100P 적립</div>
+					</div>
+					<form action="/comments/writeCommentsProcess" method="post">
+						<div class="input-group mb-3">
+							<select class="mb-3" name="point">
+								<option selected>평점</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+							</select>
+							<input type="text" name="text" class="form-control" placeholder="영화 관람평을 작성해주세요">
+							<input type="hidden" name="filmId" th:value="${filmInfo['filmDto'].id}">
+							<input type="hidden" name="memberId" th:value="${session.memberLoginInfo.id}">
+							<button>작성</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			
+			<div class="row" th:if="${not #lists.isEmpty(filmInfo['commentDtoAndCriticMemberDtoMapList'])}">
+				<div class="col">
+					<span style="font-size: 1.4em">평론가 한줄평</span>
+					<div class="row mt-2" th:each="commentDtoAndCriticMemberDtoMap : ${filmInfo['commentDtoAndCriticMemberDtoMapList']}">
+						<div class="col">
+							<div class="row">
+								<div class="col">
+									<span th:text="${commentDtoAndCriticMemberDtoMap['memberDto'].nickname}"> </span>
+									[
+									<span th:text="${commentDtoAndCriticMemberDtoMap['memberCommentsFilmDto'].point}"></span>
+									]
+								</div>
+							</div>
+							<div class="row">
+								<div class="col" th:text="${commentDtoAndCriticMemberDtoMap['memberCommentsFilmDto'].createdAt}"></div>
+							</div>
+							<div class="row">
+								<div class="col" th:text="${commentDtoAndCriticMemberDtoMap['memberCommentsFilmDto'].text}"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+<!--			<div class="row mt-3" th:if="${not #lists.isEmpty(filmInfo['allReplyAndMemberInfoList'])}">-->
+<!--				<div class="col">-->
+<!--					<span style="font-size: 1.4em">관람객 한줄평</span>-->
+<!--					<div class="row mt-2" th:each="allReplyAndMemberInfo : ${filmInfo['allReplyAndMemberInfoList']}">-->
+<!--						<div class="col">-->
+<!--							<div class="row">-->
+<!--								<div class="col">-->
+<!--									<span th:text="${allReplyAndMemberInfo['memberDto'].nickname}"> </span>-->
+<!--									[-->
+<!--									<span th:text="${allReplyAndMemberInfo['replyDto'].point}"></span>-->
+<!--									]-->
+<!--								</div>-->
+<!--							</div>-->
+<!--							<div class="row">-->
+<!--								<div class="col" th:text="${allReplyAndMemberInfo['replyDto'].createdAt}"></div>-->
+<!--							</div>-->
+<!--							<div class="row">-->
+<!--								<div class="col" th:text="${allReplyAndMemberInfo['replyDto'].text}"></div>-->
+<!--							</div>-->
+<!--							-->
+<!--							<div class="row mt-3" th:if="${not #lists.isEmpty(allReplyAndMemberInfo['replyDto'].childReplyDtoList)}">-->
+<!--								<div class="row mt-2" th:each="child1Reply : ${allReplyAndMemberInfo['replyDto'].childReplyDtoList}">-->
+<!--									<div class="col">-->
+<!--										<div class="row">-->
+<!--											<div class="col">-->
+<!--												<span th:text="${child1Reply.memberDto.nickname}"> </span>-->
+<!--												[-->
+<!--												<span th:text="${child1Reply['replyDto'].point}"></span>-->
+<!--												]-->
+<!--											</div>-->
+<!--										</div>-->
+<!--										<div class="row">-->
+<!--											<div class="col" th:text="${child1Reply['replyDto'].createdAt}"></div>-->
+<!--										</div>-->
+<!--										<div class="row">-->
+<!--											<div class="col" th:text="${child1Reply['replyDto'].text}"></div>-->
+<!--										</div>-->
+<!--										-->
+<!--										<div class="row mt-3" th:if="${not #lists.isEmpty(child1Reply['replyDto'].childReplyDtoList)}">-->
+<!--											<div class="row mt-2" th:each="child2Reply : ${child1Reply['replyDto'].childReplyDtoList}">-->
+<!--												<div class="col">-->
+<!--													<div class="row">-->
+<!--														<div class="col">-->
+<!--															<span th:text="${child2Reply['memberDto'].nickname}"> </span>-->
+<!--															[-->
+<!--															<span th:text="${child2Reply['replyDto'].point}"></span>-->
+<!--															]-->
+<!--														</div>-->
+<!--													</div>-->
+<!--													<div class="row">-->
+<!--														<div class="col" th:text="${child2Reply['replyDto'].createdAt}"></div>-->
+<!--													</div>-->
+<!--													<div class="row">-->
+<!--														<div class="col" th:text="${child2Reply['replyDto'].text}"></div>-->
+<!--													</div>-->
+<!--												</div>-->
+<!--												-->
+<!--											</div>-->
+<!--											-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--							</div>-->
+							
+							
+							
+							
+							
+<!--							<div class="div" th:if="${session.memberLoginInfo != null}">-->
+<!--								<div class="col">-->
+<!--									<form action="/comments/writeCommentsProcess" method="post">-->
+<!--										<div class="input-group">-->
+<!--											<input type="text" name="text" placeholder="대댓글을 입력">-->
+<!--											<input type="hidden" name="filmId" th:value="${filmInfo['filmDto'].id}">-->
+<!--											<input type="hidden" name="memberId" th:value="${session.memberLoginInfo.id}">-->
+<!--											<input type="hidden" name="parentCommentsId" th:value="${commentDtoAndMemberDtoMap['memberCommentsFilmDto'].id}">-->
+<!--											<button>작성</button>-->
+<!--										</div>-->
+<!--									</form>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+			
+			<div class="row mt-3" th:if="${not #lists.isEmpty(filmInfo['commentDtoAndMemberDtoMapList'])}">
+				<div class="col">
+					<span style="font-size: 1.4em">관람객 한줄평</span>
+					<div class="row mt-2" th:each="commentDtoAndMemberDtoMap : ${filmInfo['commentDtoAndMemberDtoMapList']}">
+						<div class="col">
+							<div class="row">
+								<div class="col">
+									<span th:text="${commentDtoAndMemberDtoMap['memberDto'].nickname}"> </span>
+									[
+									<span th:text="${commentDtoAndMemberDtoMap['memberCommentsFilmDto'].point}"></span>
+									]
+								</div>
+							</div>
+							<div class="row">
+								<div class="col" th:text="${commentDtoAndMemberDtoMap['memberCommentsFilmDto'].createdAt}"></div>
+							</div>
+							<div class="row">
+								<div class="col" th:text="${commentDtoAndMemberDtoMap['memberCommentsFilmDto'].text}"></div>
+							</div>
+							<div class="div" th:if="${session.memberLoginInfo != null}">
+								<div class="col">
+									<form action="/comments/writeCommentsProcess" method="post">
+										<div class="input-group">
+											<input type="text" name="text" placeholder="대댓글을 입력">
+											<input type="hidden" name="filmId" th:value="${filmInfo['filmDto'].id}">
+											<input type="hidden" name="memberId" th:value="${session.memberLoginInfo.id}">
+											<input type="hidden" name="parentCommentsId" th:value="${commentDtoAndMemberDtoMap['memberCommentsFilmDto'].id}">
+											<button>작성</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row"></div>
+		</div>
+	</div>
+	
+	<div th:unless="${string}" class="row mt-2">
+		
+		<div class="col">
+			<div class="row">
+				<div class="col bg-secondary-subtle" style="background-clip: content-box">
+					<div class="row mt-3">
+						<div class="col ms-2">
+							영화정보
+						</div>
+					</div>
+					
+					<!-- 장르 -->
+					<div class="row mt-2">
+						<div class="col-auto pe-0 ms-3 text-body-secondary">
+							<i class="bi bi-dot"></i>
+						</div>
+						<div class="col-auto ps-0 text-body-secondary">
+							장르
+						</div>
+						<div class="col-auto pe-0" th:each="genreDto : ${filmInfo['genreDtoList']}">
+							<a href="#" th:text="${genreDto.genreName}"
+							   style="color: black; text-decoration: underline"></a>
+						</div>
+						<div class="col-auto pe-0">
+							<i class="bi bi-dash"></i>
+						</div>
+						<div class="col-auto pe-0 ">
+							<span th:text="${filmInfo['filmDto'].country}"></span>
+						</div>
+					</div>
+					
+					<!-- 감독 -->
+					<div class="row mt-2 ">
+						<div class="col-auto pe-0 ms-3 text-body-secondary">
+							<i class="bi bi-dot"></i>
+						</div>
+						<div class="col-auto ps-0 text-body-secondary">
+							감독
+						</div>
+						<div class="col-auto pe-0" th:each="director : ${filmInfo['peopleDtoDirectorList']}">
+							<a th:href="@{/people/peoplePage/{id}(id=${director.id})}" th:text="${director.name}"
+							   style="color: black; text-decoration: underline"></a>
+						</div>
+					</div>
+					
+					<!-- 출연 -->
+					<div class="row mt-2 mb-3">
+						<div class="col-auto pe-0 ms-3 text-body-secondary">
+							<i class="bi bi-dot"></i>
+						</div>
+						<div class="col-auto ps-0 text-body-secondary">
+							출연
+						</div>
+						<div class="col-auto pe-0" th:each="actor : ${filmInfo['peopleDtoActorList']}">
+							<a th:href="@{/people/peoplePage/{id}(id=${actor.id})}" th:text="${actor.name}"
+							   style="color: black; text-decoration: underline"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="div mt-5">
+				<div class="col">
+					트레일러
+				</div>
+			</div>
+			<div class="row mt-2">
+				<div class="col">
+					<img class="img-fluid" th:src="|/public/img/poster/${filmInfo['filmDto'].filmName}.webp|"
+					     style="max-width: 250px; max-height: 400px; min-width: 250px; min-height: 400px;">
+				</div>
+			</div>
+		
+		
+		</div>
+	</div>
+	
+	<!--	<div class=""-->
+
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

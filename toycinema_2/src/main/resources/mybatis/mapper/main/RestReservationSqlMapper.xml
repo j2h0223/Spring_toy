@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.toy.toycinema.main.mapper.RestReservationFilmMapper">
+
+    <!-- 000 -->
+    <select id="selectAllDataDtoList">
+        select distinct date
+        from film_playing_table
+        where (date > #{today} or (date = #{today} and time >= #{time}))
+        order by date;
+    </select>
+
+    <select id="selectAllFilmDtoList">
+        select distinct film.*
+        from film_playing_table
+                 inner join film on film_playing_table.film_id = film.id
+        where (date > #{today} or (date = #{today} and time >= #{time}))
+        order by film.id desc;
+    </select>
+
+    <select id="selectAllTheaterDtoList">
+        select distinct theater.*
+        from film_playing_table
+                 inner join box_type on film_playing_table.box_type_id = box_type.id
+                 inner join box on box_type.box_id = box.id
+                 inner join theater on box.theater_id = theater.id
+        where (date > #{today} or (date = #{today} and time >= #{time}))
+        order by theater.name;
+    </select>
+
+    <!-- 001 -->
+    <!-- 날짜 -->
+    <!-- 날짜 -> 영화 -->
+    <select id="selectFilmDtoListByDate">
+        select distinct film.*
+        from film_playing_table
+                 inner join film on film_playing_table.film_id = film.id
+        where (date = #{date} and time >= #{time})
+        order by film.id desc;
+    </select>
+
+    <select id="selectFilmDtoWhiteListByDate">
+        select distinct f1.*
+        from film_playing_table fpt1
+                 inner join film f1 on fpt1.film_id = f1.id
+        where (fpt1.date > #{today} or (fpt1.date = #{today} and fpt1.time >= #{time}))
+          and f1.id not in (select distinct f2.id
+                            from film_playing_table fpt2
+                                     inner join film f2 on fpt2.film_id = f2.id
+                            where (fpt2.date = #{date} and fpt2.time >= #{time}))
+        order by f1.id desc;
+    </select>
+
+    <!-- 날짜 -> 영화관 -->
+    <select id="selectTheaterDtoListByDate">
+        select distinct theater.*
+        from film_playing_table
+                 inner join box_type on film_playing_table.box_type_id = box_type.id
+                 inner join box on box_type.box_id = box.id
+                 inner join theater on box.theater_id = theater.id
+        where (date = #{date} and time >= #{time})
+        order by theater.name;
+    </select>
+
+    <select id="selectTheaterDtoWhiteListByDate">
+        select distinct t1.*
+        from film_playing_table fpt1
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+                 join theater t1 on b1.theater_id = t1.id
+        where (fpt1.date > #{today} or (fpt1.date = #{today} and fpt1.time >= #{time}))
+          and not exists (select 1
+                          from film_playing_table fpt2
+                                   join box_type bt2 on fpt2.box_type_id = bt2.id
+                                   join box b2 on bt2.box_id = b2.id
+                                   join theater t2 on b2.theater_id = t2.id
+                          where t2.id = t1.id
+                            and (fpt2.date = #{date} and fpt2.time >= #{time}))
+        order by t1.name;
+    </select>
+
+
+    <!-- 010 영화관 -->
+    <!-- 영화관 => 날짜 -->
+    <select id="selectDateDtoListByTheater">
+        select distinct fpt.date
+        from film_playing_table fpt
+                 inner join box_type bt on fpt.box_type_id = bt.id
+                 inner join box b on bt.box_id = b.id
+                 inner join theater t on b.theater_id = t.id
+        where t.id = #{theaterId}
+          and (fpt.date > #{today} or (fpt.date = #{today} and fpt.time >= #{time}))
+        order by fpt.date;
+    </select>
+
+    <!--    <select id="selectDateDtoListWhiteTheater">-->
+    <!--        select distinct fpt1.date-->
+    <!--        from film_playing_table fpt1-->
+    <!--                 join box_type bt1 on fpt1.box_type_id = bt1.id-->
+    <!--                 join box b1 on bt1.box_id = b1.id-->
+    <!--                 join theater t1 on b1.theater_id = t1.id-->
+    <!--        where (fpt1.date > #{today} or (fpt1.date = #{today} and fpt1.time >= #{time}))-->
+    <!--          and not exists (select 1-->
+    <!--                          from box_type bt2-->
+    <!--                                   join box b2 on bt2.box_id = b2.id-->
+    <!--                          where bt2.id = fpt1.box_type_id-->
+    <!--                            and b2.theater_id = #{theaterId})-->
+    <!--        order by fpt1.date;-->
+    <!--    </select>-->
+
+    <!-- 영화관 => 극장 -->
+    <select id="selectFilmDtoListByTheater">
+        select distinct f1.*
+        from film f1
+                 join film_playing_table fpt on f1.id = fpt.film_id
+                 join box_type bt1 on fpt.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+                 join theater t1 on b1.theater_id = t1.id
+        where t1.id = #{theaterId}
+          and (fpt.date > #{today} or (fpt.date = #{today} and fpt.time >= #{time}))
+        order by f1.id desc;
+    </select>
+
+    <select id="selectFilmDtoWhiteListByTheater">
+        select distinct f1.*
+        from film f1
+                 join film_playing_table fpt1 on f1.id = fpt1.film_id
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+                 join theater t1 on b1.theater_id = t1.id
+        where (fpt1.date > #{today} or (fpt1.date = #{today} and fpt1.time >= #{time}))
+          and not exists(select 1
+                         from film_playing_table fpt2
+                                  join box_type bt2 on fpt2.box_type_id = bt2.id
+                                  join box b2 on bt2.box_id = b2.id
+                         where fpt2.film_id = f1.id
+                           and b2.theater_id = #{theaterId})
+        order by f1.id desc;
+    </select>
+
+
+    <!-- 100 극장만 선택 -->
+    <!-- 극장 => 날짜 -->
+
+    <select id="selectDateDtoListByFilm">
+        select distinct fpt1.date
+        from film_playing_table fpt1
+        where (fpt1.date > #{today} or (fpt1.date = #{today} and fpt1.time >= #{time}))
+          and fpt1.film_id = #{filmId}
+        order by fpt1.date;
+    </select>
+
+    <select id="selectTheaterDtoListByFilm">
+        select distinct t1.*
+        from film_playing_table fpt1
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+                 join theater t1 on b1.theater_id = t1.id
+        where fpt1.film_id = #{filmId}
+          and (fpt1.date > #{today} or (fpt1.date = #{today} and fpt1.time >= #{time}))
+        order by t1.name;
+    </select>
+
+    <select id="selectTheaterDtoWhiteListByFilm">
+        select distinct t1.*
+        from film_playing_table fpt1
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+                 join theater t1 on b1.theater_id = t1.id
+        where (fpt1.date > #{today} or (fpt1.date = #{today} and fpt1.time >= #{time}))
+          and not exists(select 1
+                         from film_playing_table fpt2
+                                  join box_type bt2 on fpt2.box_type_id = bt2.id
+                                  join box b2 on bt2.box_id = b2.id
+                         where t1.id = b2.theater_id
+                           and fpt2.film_id = #{filmId})
+        order by t1.name;
+    </select>
+
+    <!-- 011 극장 날짜 -->
+    <!-- 날짜 -->
+    <!--    <select id="selectDateListByTheaterAndDate">-->
+    <!--        select *-->
+    <!--        from film_playing_table fpt1-->
+    <!--        join box_type bt1 on fpt1.box_type_id = bt1.id-->
+    <!--        join box b1 on bt1.box_id = b1.id-->
+    <!--        where b1.theater_id = #{theaterId} and (fpt1.date = #{date} and fpt1.time >= #{time});-->
+    <!--    </select>-->
+
+    <select id="selectFilmDtoListByTheaterAndDate">
+        select distinct f1.*
+        from film f1
+                 join film_playing_table fpt1 on f1.id = fpt1.film_id
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+        where b1.theater_id = #{theaterId}
+          and (fpt1.date = #{date} and fpt1.time >= #{time})
+        order by f1.id desc;
+    </select>
+
+    <select id="selectFilmDtoWhiteListByTheaterAndDate">
+        select distinct f1.*
+        from film f1
+                 join film_playing_table fpt1 on f1.id = fpt1.film_id
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+        where (fpt1.date > #{today} or (fpt1.date = #{today} and fpt1.time >= #{time}))
+          and not exists(select 1
+                         from film_playing_table fpt2
+                                  join box_type bt2 on fpt2.box_type_id = bt2.id
+                                  join box b2 on bt2.box_id = b2.id
+                         where fpt2.film_id = f1.id
+                           and b2.theater_id = #{theaterId}
+                           and (fpt2.date = #{date} and fpt2.time >= #{time}))
+        order by f1.id desc;
+    </select>
+
+    <!-- 101 영화 날짜 -->
+
+    <select id="selectTheaterDtoListByFilmAndDate">
+        select distinct t1.*
+        from film_playing_table fpt1
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+                 join theater t1 on b1.theater_id = t1.id
+        where fpt1.film_id = #{filmId}
+          and (fpt1.date = #{date} and fpt1.time >= #{time})
+        order by t1.name;
+    </select>
+
+    <select id="selectTheaterDtoWhiteListByFilmAndDate">
+        select distinct t1.*
+        from film_playing_table fpt1
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+                 join theater t1 on b1.theater_id = t1.id
+        where (fpt1.date > #{today} or (fpt1.date = #{today} and fpt1.time >= #{time}))
+          and not exists(select 1
+                         from film_playing_table fpt2
+                                  join box_type bt2 on fpt2.box_type_id = bt2.id
+                                  join box b2 on bt2.box_id = b2.id
+                         where t1.id = b2.theater_id
+                           and fpt2.film_id = #{filmId}
+                           and (fpt2.date = #{date} and fpt2.time >= #{time}))
+        order by t1.name;
+    </select>
+
+
+    <!-- 110 -->
+    <!-- 영화 극장 -->
+    <select id="selectDateDtoListByFilmAndTheater">
+        select distinct fpt1.date
+        from film_playing_table fpt1
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+        where fpt1.film_id = #{filmId}
+          and b1.theater_id = #{theaterId}
+        order by fpt1.date;
+    </select>
+
+    <!-- 111 -->
+    <select id="selectBoxTypeDtoListForReservation">
+        select distinct bt1.*
+        from film_playing_table fpt1
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+        where (fpt1.date = #{date}
+            and fpt1.time >= #{time})
+          and b1.theater_id = #{theaterId}
+          and fpt1.film_id = #{filmId}
+        order by bt1.id;
+    </select>
+    
+    <select id="selectTypeDtoForReservation">
+        select *
+        from type
+        where id = #{typeId};
+    </select>
+
+    <select id="selectBoxDtoForReservation">
+        select *
+        from box
+        where id = #{boxId};
+    </select>
+
+    <select id="selectTimeDtoListForReservation">
+        select time
+        from film_playing_table
+        where film_id = #{filmId}
+          and (date = #{date}
+            and time >= #{time})
+          and box_type_id = #{boxTypeId}
+        order by time;
+    </select>
+
+    <select id="countFilmReservationSeatForReservation">
+        select sum(fr1.count)
+        from film_reservation fr1
+                 join film_playing_table fpt1
+                      on fr1.film_playing_table_id = fpt1.id
+        where (fpt1.date = #{date} and fpt1.time = #{time})
+          and fpt1.film_id = #{filmId}
+          and fpt1.box_type_id = #{boxTypeId};
+    </select>
+
+    <select id="selectFilmPlayingTableDtoForReservation">
+        select *
+        from film_playing_table fpt1
+        where (fpt1.date = #{date} and fpt1.time = #{time})
+          and fpt1.film_id = #{filmId}
+          and fpt1.box_type_id = #{boxTypeId};
+    </select>
+
+    <!-- 영화 정보 -->
+    <select id="selectFilmDtoByFilm">
+        select *
+        from film
+        where id = #{id};
+    </select>
+    <select id="selectFilmPosterDtoByFilm">
+        select *
+        from film_poster
+        where film_id = #{id};
+    </select>
+
+    <!-- 극장 정보 -->
+    <select id="selectTheaterDtoByTheater">
+        select *
+        from theater
+        where id = #{id};
+    </select>
+
+    <!-- 상영관 정보 -->
+    <select id="selectBoxDtoByFilmPlayingTable">
+        select b1.*
+        from film_playing_table fpt1
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join box b1 on bt1.box_id = b1.id
+        where fpt1.id = #{id};
+    </select>
+
+    <select id="selectTypeDtoByFilmPlayingTable">
+        select t1.*
+        from film_playing_table fpt1
+                 join box_type bt1 on fpt1.box_type_id = bt1.id
+                 join type t1 on bt1.type_id = t1.id
+        where fpt1.id = #{id};
+    </select>
+
+    <select id="selectFilmPlayingTableDtoByFilmPlayingTable">
+        select *
+        from film_playing_table fpt
+        where id = #{id};
+    </select>
+
+
+    <select id="selectTheaterDtoByFilmPlayingTable">
+        select t.*
+        from film_playing_table fpt
+                 join box_type bt
+                      on fpt.box_type_id = bt.id
+                 join box b on bt.box_id = b.id
+                 join theater t on b.theater_id = t.id
+        where fpt.id = #{id};
+    </select>
+
+    <select id="countFilmReservationSeatByFilmPlayingTable">
+        select sum(film_reservation.count)
+        from film_reservation
+        where film_reservation.film_playing_table_id = #{id};
+    </select>
+
+    <select id="selectFilmDtoByFilmPlayingTable">
+        select distinct f.*
+        from film_playing_table fpt join film f on fpt.film_id = f.id
+        where fpt.id = #{id};
+    </select>
+
+
+</mapper>

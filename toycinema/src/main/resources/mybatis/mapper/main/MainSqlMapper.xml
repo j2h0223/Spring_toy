@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.toy.toycinema.main.mapper.MainPageSqlMapper">
+    <select id="selectFilmByIsNowPlaying">
+        select *
+        from film
+        where is_now_playing = true;
+    </select>
+    <select id="selectFilmPosterDtoByFilmId">
+        select *
+        from film_poster
+        where film_id = #{id};
+    </select>
+
+    <!-- 상영테이블 - 예매 -->
+
+
+    <!-- 정신차림 -->
+
+    <!-- 기본 -->
+
+    <!-- 기본 날짜 -->
+    <select id="selectAllDate">
+        select distinct film_playing_table.date
+        from film_playing_table
+        WHERE (film_playing_table.date > #{today}
+            OR (film_playing_table.date = #{today} AND film_playing_table.time > #{time}))
+        order by film_playing_table.date;
+    </select>
+
+    <!-- 기본 영화 -->
+    <select id="selectAllFilm">
+        select distinct film.*
+        from film
+                 inner join film_playing_table on film.id = film_playing_table.film_id
+        WHERE (film_playing_table.date > #{today}
+            OR (film_playing_table.date = #{today} AND film_playing_table.time > #{time}))
+        order by film.id desc;
+    </select>
+
+    <select id="selectRemainAllFilm">
+        select distinct f1.*
+        from film f1
+                 inner join film_playing_table fpt1 on f1.id = fpt1.film_id
+        where (fpt1.date > #{date}
+            or (fpt1.date = #{date} AND fpt1.time > #{time}))
+        order by f1.id desc;
+    </select>
+
+    <!-- 기본 극장 -->
+    <select id="selectAllTheater">
+        select distinct theater.*
+        from film_playing_table
+                 inner join box_type on film_playing_table.box_type_id = box_type.id
+                 inner join box on box_type.box_id = box.id
+                 inner join theater on box.theater_id = theater.id
+        WHERE (film_playing_table.date > #{today}
+            OR (film_playing_table.date = #{today} AND film_playing_table.time > #{time}))
+        order by theater.name asc;
+    </select>
+
+
+    <!-- 하나만 선택 -->
+    <!-- 1 날짜만 선택 -->
+
+    <select id="selectTheaterListByPickDate">
+        select distinct theater.*
+        from film_playing_table
+                 inner join box_type on film_playing_table.box_type_id = box_type.id
+                 inner join box on box_type.box_id = box.id
+                 inner join theater on box.theater_id = theater.id
+        where film_playing_table.date = #{date}
+          and film_playing_table.time > #{time}
+        order by theater.name asc;
+    </select>
+
+    <select id="selectRemainTheaterListByPickDate">
+        select distinct t1.*
+        from film_playing_table fpt1
+                 inner join box_type bt1 on fpt1.box_type_id = bt1.id
+                 inner join box b1 on bt1.box_id = b1.id
+                 inner join theater t1 on b1.theater_id = t1.id
+        WHERE ((fpt1.date > #{today})
+            or (fpt1.date = #{today} and fpt1.time > #{time}))
+          and t1.id not in (select distinct t2.id
+                            from film_playing_table fpt2
+                                     inner join box_type bt2 on fpt2.box_type_id = bt2.id
+                                     inner join box b2 on bt2.box_id = b2.id
+                                     inner join theater t2 on b2.theater_id = t2.id
+                            where (fpt2.date = #{date} and fpt2.time > #{time}))
+        order by t1.name asc;
+    </select>
+
+
+    <select id="selectFilmListByPickedDate">
+        SELECT distinct film.*
+        FROM film_playing_table
+                 inner join film on film_playing_table.film_id = film.id
+        WHERE film_playing_table.date = #{date}
+          AND film_playing_table.time > #{time}
+        order by film.id desc;
+    </select>
+
+    <select id="selectRemainFilmListByPickedDate">
+        SELECT distinct f1.*
+        FROM film_playing_table fpt1
+                 inner join film f1 on fpt1.film_id = f1.id
+        where (fpt1.date >= #{today}
+            and not ((fpt1.date > #{date})
+                or (fpt1.date = #{date} AND fpt1.time > #{time})))
+          and f1.id not in (SELECT distinct f2.id
+                            FROM film_playing_table fpt2
+                                     inner join film f2 on fpt2.film_id = f2.id
+                            WHERE fpt2.date = #{date}
+                              AND fpt2.time > #{time})
+        order by f1.id desc;
+    </select>
+
+
+    <!-- 하나만 선택 -->
+    <!-- 2 영화만 선택 -->
+
+    <select id="selectTheaterListByPickedFilm">
+        SELECT distinct theater.*
+        FROM film_playing_table
+                 inner join box_type on film_playing_table.box_type_id = box_type.id
+                 inner join box on box_type.box_id = box.id
+                 inner join theater on box.theater_id = theater.id
+        WHERE film_playing_table.film_id = #{filmId}
+          and ((film_playing_table.date > #{today}) OR
+               (film_playing_table.date = #{today} AND film_playing_table.time >= #{time}))
+        order by theater.name asc;
+    </select>
+
+    <select id="selectRemainTheaterListByPickedFilm">
+        select distinct t1.*
+        from film_playing_table fpt1
+                 inner join box_type bt1 on fpt1.box_type_id = bt1.id
+                 inner join box b1 on bt1.box_id = b1.id
+                 inner join theater t1 on b1.theater_id = t1.id
+        where ((fpt1.date > #{today}
+            or (fpt1.date = #{today} AND fpt1.time > #{time})))
+            and t1.id not in (SELECT distinct t2.id
+                            FROM film_playing_table fpt2
+                                     inner join box_type bt2 on fpt2.box_type_id = bt2.id
+                                     inner join box b2 on bt2.box_id = b2.id
+                                     inner join theater t2 on b2.theater_id = t2.id
+                            WHERE fpt2.film_id = #{filmId}
+                              and ((fpt2.date > #{today}) OR (fpt2.date = #{today} AND fpt2.time >= #{time})))
+        order by t1.name desc;
+    </select>
+
+    <select id="selectDateListByPickedFilm">
+        select distinct film_playing_table.date
+        from film_playing_table
+                 inner join film on film_playing_table.film_id = film.id
+        where film_playing_table.film_id = #{filmId}
+          and ((film_playing_table.date > #{today}) OR
+               (film_playing_table.date = #{today} AND film_playing_table.time >= #{time}))
+        order by film_playing_table.date;
+    </select>
+
+    <select id="selectRemainDateListByPickedFilm">
+        select distinct fpt1.date
+        from film_playing_table fpt1
+        where ((fpt1.date > #{today}
+            or (fpt1.date = #{today} AND fpt1.time > #{time})))
+          and fpt1.date not in (select distinct fpt2.date
+                                from film_playing_table fpt2
+                                         inner join film f2 on fpt2.film_id = f2.id
+                                where fpt2.film_id = #{filmId}
+                                  and ((fpt2.date > #{today}) OR
+                                       (fpt2.date = #{today} AND fpt2.time >= #{time})))
+        order by fpt1.date;
+    </select>
+
+
+    <!-- 하나만 선택 -->
+    <!-- 3 극장만 선택 -->
+
+    <select id="selectFilmListByPickedTheater">
+        select distinct film.*
+        from theater
+                 inner join box on theater.id = box.theater_id
+                 inner join box_type on box.id = box_type.box_id
+                 inner join film_playing_table on box_type.id = film_playing_table.box_type_id
+                 inner join film on film_playing_table.film_id = film.id
+        where theater.id = #{theaterId}
+          and (film_playing_table.date > #{today}
+            or (film_playing_table.date = #{today} AND film_playing_table.time > #{time}))
+        order by film_playing_table.date;
+    </select>
+
+    <select id="selectRemainFilmListByPickedTheater">
+        select distinct f1.*
+        from film f1
+                 inner join film_playing_table fpt1 on f1.id = fpt1.film_id
+        where ((fpt1.date > #{today}
+            or (fpt1.date = #{today} AND fpt1.time > #{time})))
+          and f1.id not in (select distinct f2.id
+                            from theater t2
+                                     inner join box b2 on t2.id = b2.theater_id
+                                     inner join box_type bt2 on b2.id = bt2.box_id
+                                     inner join film_playing_table fpt2 on bt2.id = fpt2.box_type_id
+                                     inner join film f2 on fpt2.film_id = f2.id
+                            where t2.id = #{theaterId}
+                              and (fpt2.date > #{today}
+                                or (fpt2.date = #{today} AND fpt2.time > #{time})))
+        order by f1.id desc;
+    </select>
+
+    <select id="selectDateListByPickedTheater">
+        select distinct film_playing_table.date
+        from film_playing_table
+                 inner join box_type on film_playing_table.box_type_id = box_type.id
+                 inner join box on box_type.box_id = box.id
+                 inner join theater on box.theater_id = theater.id
+        where theater.id = #{theaterId}
+          and ((film_playing_table.date > #{date}) OR (film_playing_table.date = #{date} AND time >= #{time}))
+        order by film_playing_table.date;
+    </select>
+
+
+    <!-- 극장/영화 선택 -->
+    <!-- 해당 영화관에서만 상영하는 영화만 출력 되어야하며,
+         해당 영화만 상영하는 영화관이 출력 되어야함 -->
+
+    <select id="selectFilmListByPickedTheaterAndFilm">
+        select distinct film.*
+        from film
+                 inner join film_playing_table on film.id = film_playing_table.film_id
+                 inner join box_type on film_playing_table.box_type_id = box_type.id
+                 inner join box on box_type.box_id = box.id
+                 inner join theater on box.theater_id = theater.id
+        where theater.id = #{theaterId}
+          and film.id = #{filmId}
+          and ((film_playing_table.date > #{date}) OR (film_playing_table.date = #{date} AND time >= #{time}))
+        order by film_playing_table.date;
+    </select>
+
+    <select id="selectTheaterListByPickedTheaterAndFilm">
+        select distinct theater.*
+        from theater
+                 inner join box on theater.id = box.theater_id
+                 inner join box_type on box.id = box_type.box_id
+                 inner join film_playing_table on box_type.id = film_playing_table.box_type_id
+                 inner join film on film_playing_table.film_id = film.id
+        where theater.id = #{theaterId}
+          and film.id = #{filmId}
+          and ((film_playing_table.date > #{date}) OR (film_playing_table.date = #{date} AND time >= #{time}))
+        order by film_playing_table.date;
+    </select>
+
+    <select id="selectDateListByPickedTheaterAndFilm">
+        select distinct film_playing_table.date
+        from theater
+                 inner join box on theater.id = box.theater_id
+                 inner join box_type on box.id = box_type.box_id
+                 inner join film_playing_table on box_type.id = film_playing_table.box_type_id
+                 inner join film on film_playing_table.film_id = film.id
+        where theater.id = #{theaterId}
+          and film.id = #{filmId}
+          and ((film_playing_table.date > #{date}) OR (film_playing_table.date = #{date} AND time >= #{time}))
+        order by film_playing_table.date;
+    </select>
+
+
+    <!-- 극장/날짜 선택 -->
+
+
+    <!-- 영화/날짜 선택 -->
+
+
+    <!-- 3가지 모두 선택 -->
+    <!-- 극장/영화 선택 의 3개도 나와야한다 기본적으로 그래야 변한다 다시-->
+
+    <!-- 상영관 타입 -->
+
+    <select id="selectBoxTypeByPickedTheaterAndFilmAndDate">
+        select distinct box_type.*
+        from theater
+                 inner join box on theater.id = box.theater_id
+                 inner join box_type on box.id = box_type.box_id
+                 inner join film_playing_table on box_type.id = film_playing_table.box_type_id
+                 inner join film on film_playing_table.film_id = film.id
+        where theater.id = #{theaterId}
+          and film.id = #{filmId}
+          and (film_playing_table.date = #{date} AND time >= #{time})
+        order by film_playing_table.date and film_playing_table.time;
+    </select>
+
+    <!-- 상영관 -->
+    <select id="selectBoxByPickedTheaterAndFilmAndDate">
+        select distinct box.*
+        from theater
+                 inner join box on theater.id = box.theater_id
+                 inner join box_type on box.id = box_type.box_id
+                 inner join film_playing_table on box_type.id = film_playing_table.box_type_id
+                 inner join film on film_playing_table.film_id = film.id
+        where theater.id = #{theaterId}
+          and film.id = #{filmId}
+          and (film_playing_table.date = #{date} AND time >= #{time})
+        order by film_playing_table.date and film_playing_table.time;
+    </select>
+
+
+<!--    예매-->
+    <insert id="insertReservation">
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            select max(id) from film_reservation;
+        </selectKey>
+        insert into film_reservation (count, film_playing_table_id, member_id)
+        values (#{count}, #{filmPlayingTableId}, #{memberId});
+    </insert>
+
+    <select id="selectFilmReservationDto">
+        select *
+        from film_reservation
+        where id = #{id};
+    </select>
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.toy.toycinema.comments.mapper.CommentsSqlMapper">
+    <insert id="insertMemberCommentsFilm">
+        insert into member_comments_film (text, point, member_id, film_id)
+        values (#{text}, #{point}, #{memberId}, #{filmId});
+    </insert>
+
+    <select id="selectMemberCommentsFilmDtoByFilmId">
+        select *
+        from member_comments_film
+        where film_id = #{id};
+    </select>
+
+<!--    <resultMap id="ReplyDto" type="com.toy.boxoffice.dto.ReplyDto">-->
+<!--        <id column="depth1Id" property="id"/>-->
+<!--        <result column="depth1Text" property="text"/>-->
+<!--        <result column="depth1Point" property="point"/>-->
+<!--        <result column="depth1MemberID" property="memberId"/>-->
+<!--        <result column="depth1FilmId" property="filmId"/>-->
+
+<!--        <collection property="childReplyDtoList" ofType="com.toy.boxoffice.dto.ReplyDto">-->
+<!--            <id column="depth2Id" property="id"/>-->
+<!--            <result column="depth2Text" property="text"/>-->
+<!--            <result column="depth2MemberID" property="memberId"/>-->
+<!--            <result column="depth2FilmId" property="filmId"/>-->
+
+<!--            <collection property="childReplyDtoList" ofType="com.toy.boxoffice.dto.ReplyDto">-->
+<!--                <id column="depth3Id" property="id"/>-->
+<!--                <result column="depth3Text" property="text"/>-->
+<!--                <result column="depth3MemberID" property="memberId"/>-->
+<!--                <result column="depth3FilmId" property="filmId"/>-->
+<!--            </collection>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+<!--    -->
+<!--    <select id="selectAllReplyDto3Depth" resultMap="ReplyDto">-->
+<!--        select-->
+<!--            d1.id as depth1Id, d1.text as depth1Text, d1.point as depth1Point, d1.member_id as depth1MemberId, d1.film_id as depth1FilmId,-->
+<!--            d2.id as depth2Id, d2.text as depth2Text, d2.point as depth2Point, d2.member_id as depth2MemberId, d2.film_id as depth2FilmId,-->
+<!--            d3.id as depth3Id, d3.text as depth3Text, d3.point as depth3Point, d3.member_id as depth3MemberId, d3.film_id as depth3Filmid-->
+<!--        from member-->
+<!--            join member_comments_film d1 on member.id = d1.member_id-->
+<!--            left join member_comments_film d2 on d1.id = d2.parent_comments_id-->
+<!--            left join member_comments_film d3 on d2.id = d3.parent_comments_id-->
+<!--        where d1.parent_comments_id is null and member.is_critic is false;-->
+
+<!--    </select>-->
+</mapper>

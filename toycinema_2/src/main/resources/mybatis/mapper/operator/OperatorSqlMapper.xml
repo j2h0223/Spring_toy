@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.toy.toycinema.operator.mapper.OperatorSqlMapper">
+
+    <!--관리자 등록/로그인-->
+    <insert id="insertOperator">
+        insert into operator (account_name, password, name)
+        values (#{accountName}, #{password}, #{name});
+    </insert>
+
+    <select id="selectOperatorForAuth">
+        select *
+        from operator
+        where account_name = #{accountName}
+          and password = #{password};
+    </select>
+
+    <!--영화등록-->
+    <insert id="insertFilmBasicInfo">
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            select max(id) from film;
+        </selectKey>
+        insert into film (film_name, original_name, story, opening_day, end_day, running_time, country, film_rating)
+        values (#{filmName}, #{originalName}, #{story}, #{openingDay}, #{endDay}, #{runningTime}, #{country}, #{filmRating});
+    </insert>
+
+    <select id="selectPeopleDto">
+        select *
+        from people
+        where name = #{name}
+          and birth = #{birth};
+    </select>
+
+    <insert id="insertFilmDirectorPeople">
+        insert into film_director_people (people_id, film_id)
+        values (#{peopleId}, #{filmId});
+    </insert>
+    <insert id="insertFilmActorPeople">
+        insert into film_actor_people (people_id, film_id)
+        values (#{peopleId}, #{filmId});
+    </insert>
+
+    <select id="selectGenreDto">
+        select *
+        from genre
+        where genre_name = #{genreName};
+    </select>
+    <insert id="insertGenre">
+        insert into genre (genre_name)
+        values (#{genreName});
+    </insert>
+    <insert id="insertFilmGenre">
+        insert into film_genre (film_id, genre_id)
+        values (#{filmId}, #{genreId});
+    </insert>
+
+    <insert id="insertFilmUrlYoutube">
+        insert into film_youtube (film_id, url_youtube)
+        values (#{filmId}, #{urlYoutube});
+    </insert>
+
+    <insert id="insertPeople">
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            select max(id) from people;
+        </selectKey>
+        insert into people (name, original_name, birth, country)
+        values (#{name}, #{originalName}, #{birth}, #{country});
+    </insert>
+
+    <insert id="insertFilmDirectorPeopleByPeopleDto">
+        insert into film_director_people (people_id, film_id)
+        values (#{peopleId}, #{filmId});
+    </insert>
+
+    <insert id="insertFilmActorPeopleByPeopleDto">
+        insert into film_actor_people (people_id, film_id)
+        values (#{peopleId}, #{filmId});
+    </insert>
+
+    <select id="selectTypeDtoByTypeName">
+        select *
+        from type
+        where type_name = #{typeName};
+    </select>
+
+    <select id="selectTypeDtoByTypeId">
+        select *
+        from type
+        where id = #{id};
+    </select>
+
+    <insert id="insertType">
+        insert into type (type_name)
+        values (#{typeName});
+    </insert>
+
+    <insert id="insertTypeReturnID">
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            select max(id) from type;
+        </selectKey>
+        insert into type (type_name)
+        values (#{typeName});
+    </insert>
+
+    <insert id="insertFilmType">
+        insert into film_type (type_id, film_id)
+        values (#{typeId}, #{filmId});
+    </insert>
+
+    <update id="updateFilmUrlMain">
+        update film
+        set url_main = #{urlMain}
+        where id = #{id};
+    </update>
+
+    <insert id="insertFilmPoster">
+        insert into film_poster (film_id, url_sub, original_name)
+        values (#{filmId}, #{urlSub}, #{originalName});
+    </insert>
+
+
+<!-- 극장 -->
+    <insert id="insertTheater">
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            select max(id) from theater;
+        </selectKey>
+        insert into theater (name, location, open_time, close_time)
+        values (#{name}, #{location}, #{openTime},#{closeTime});
+    </insert>
+
+    <select id="selectTheaterDtoByTheaterID">
+        select *
+        from theater
+        where id = #{id};
+    </select>
+
+    <select id="selectAllTheater">
+        select *
+        from theater;
+    </select>
+
+    <insert id="insertBox">
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            select max(id) from box;
+        </selectKey>
+        insert into box (name, theater_id, capacity, location)
+        values (#{name}, #{theaterId}, #{capacity}, #{location});
+    </insert>
+
+    <insert id="insertBoxType">
+        insert into box_type (box_id, type_id)
+        values (#{boxId}, #{typeId});
+    </insert>
+    
+
+
+    <select id="selectAllBoxType">
+        select *
+        from box_type;
+    </select>
+
+    <select id="selectAllBoxTypeByTypeId">
+        select *
+        from box_type
+        where type_id = #{typeId};
+    </select>
+
+    <select id="selectFilmIsPlaying">
+        select *
+        from film
+        where is_now_playing = true;
+    </select>
+
+    <select id="selectFilmType">
+        select *
+        from film_type;
+    </select>
+
+    <select id="selectAllFilmTypeByFilmId">
+        select *
+        from film_type
+        where film_id = #{filmId};
+    </select>
+
+    <select id="selectFilmDtoByFilmId">
+        select *
+        from film
+        where id = #{id};
+    </select>
+
+    <select id="selectBoxDtoByBoxId">
+        select *
+        from box
+        where id = #{id};
+    </select>
+
+    <select id="selectBoxTypeDtoByBoxIdAndTypeId">
+        select *
+        from box_type
+        where box_id = #{boxId} and type_id = #{typeId};
+    </select>
+
+    <insert id="insertFIlmPlayingTable">
+        insert into film_playing_table (date, time, price, film_id, box_type_id)
+        values (#{date}, #{time}, #{price}, #{filmId}, #{boxTypeId});
+    </insert>
+</mapper>

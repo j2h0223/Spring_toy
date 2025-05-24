@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.toy.board.dto.member.mapper.MemberSqlMapper">
+    <insert id="insertMember" useGeneratedKeys="true" keyProperty="memberId">
+        insert into member (account_name, password)
+        values (#{accountName}, #{password});
+    </insert>
+
+    <insert id="insertMemberInfo">
+        insert into member_info (member_id, nickname, email, gender, birth, phone)
+        values (#{memberId}, #{nickname}, #{email}, #{gender}, #{birth}, #{phone});
+    </insert>
+
+    <select id="selectMemberByAccountName">
+        select member_id, account_name, password
+        from member
+        where account_name = #{account_name};
+    </select>
+</mapper>
+
+
+

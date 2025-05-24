@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>login Page</title>
+</head>
+<body>
+
+<h1>login page</h1>
+
+<form action="/member/loginProcess" method="post">
+	<input type="text" placeholder="Enter ID" name="accountName"><br>
+	<input type="password" placeholder="Enter password" name="password"><br>
+	<button> login</button>
+	<a href="/member/join">join</a>
+</form>
+
+</body>
+</html>

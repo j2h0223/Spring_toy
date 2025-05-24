@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	
+	<meta charset="UTF-8">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+	      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+	
+	<title>paymentCheckPage</title>
+	
+	
+	<script th:inline="javascript">
+		const filmReservationDto = [[${filmReservationDto}]];
+	</script>
+	
+	<script>
+		window.addEventListener("DOMContentLoaded", () => {
+			rendering();
+			makeDom();
+			gotoAction();
+		});
+		
+		const rendering = function () {
+			
+			fetch(`/member/paymentCheckPage?id=${filmReservationDto.id}`)
+					.then(response => response.json())
+					.then(json => {
+						
+						const colNameAndType = document.getElementById("colNameAndType");
+						colNameAndType.innerHTML = '';
+						colNameAndType.innerText = json['filmDto']['filmName'] + ' (' + json['typeDto']['typeName'] + ')';
+						
+						const colOriginalNameAndType = document.getElementById("colOriginalNameAndType");
+						colOriginalNameAndType.innerHTML = '';
+						colOriginalNameAndType.innerText = json['filmDto']['originalName'];
+						
+						const colDataAndTime = document.getElementById("colDataAndTime");
+						colDataAndTime.innerHTML = '';
+						
+						const parts = json['filmPlayingTableDto']['date'].split('-');
+						const year = parseInt(parts[0]);
+						const month = parseInt(parts[1]) - 1; // 월은 0부터 시작
+						const day = parseInt(parts[2]);
+						const localDate = new Date(year, month, day);
+						
+						const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+						// const monthFormatted = String(localDate.getMonth() + 1).padStart(2, '0'); // getMonth()는 0부터 시작
+						// const dayFormatted = String(localDate.getDate()).padStart(2, '0');
+						const dayOfWeek = weekdays[localDate.getDay()];
+						
+						// const time = info['filmPlayingTableDto']['time'].split(5);
+						
+						const timeString = `${json['filmPlayingTableDto']['time']}`
+						const time = timeString.substring(0, 5);
+						
+						
+						const [hours, minutes] = time.split(':').map(Number);
+						const date = new Date(); // 현재 날짜와 시간으로 Date 객체 생성
+						date.setHours(hours);    // 시간을 12로 설정
+						date.setMinutes(minutes); // 분을 00으로 설정
+						date.setSeconds(0);      // 초를 0으로 설정 (정확성을 위해)
+						// date.setMilliseconds(0); // 밀리초를 0으로 설정
+						
+						date.setMinutes(date.getMinutes() + json['filmDto']['runningTime']);
+						const resultHours = date.getHours();
+						const resultMinutes = date.getMinutes();
+						
+						const formattedHours = String(resultHours).padStart(2, '0');
+						const formattedMinutes = String(resultMinutes).padStart(2, '0');
+						
+						// date_time.innerText = `${year}.${month}.${day} (${dayOfWeek}) ${time}`;
+						colDataAndTime.innerText = `${year}.${month + 1}.${day}(${dayOfWeek})  ${time} ~ ${formattedHours}:${formattedMinutes}`;
+						
+						
+						const colTheaterAndBox = document.getElementById("colTheaterAndBox");
+						colTheaterAndBox.innerHTML = '';
+						colTheaterAndBox.innerText = json['theaterDto'].name + ' ' + json['boxDto']['name'] + ' (' + json['boxDto']['location'] + ')';
+						
+						const colSeatCount = document.getElementById("colSeatCount");
+						colSeatCount.innerHTML = '';
+						colSeatCount.innerText = json['filmReservationDto']['count'] + '명';
+						
+						const colTotalPrice = document.getElementById("colTotalPrice");
+						colTotalPrice.innerHTML = '';
+						colTotalPrice.innerText = Number(json['filmPlayingTableDto']['price']) * Number(json['filmReservationDto']['count']) + `원`;
+						
+					});
+		};
+		
+		const makeDom = function () {
+			const gotoHome = document.getElementById("gotoHome");
+			gotoHome.onclick = () => {
+				gotoAction(gotoHome);
+			};
+			
+			const gotoMyPage = document.getElementById("gotoMyPage");
+			gotoMyPage.onclick = () => {
+				gotoAction(gotoMyPage);
+			};
+		};
+		
+		const gotoAction = function (dom) {
+			if (dom === document.getElementById("gotoHome")) {
+				location.href = `/main/homePage`;
+			} else if (dom === document.getElementById("gotoMyPage")) {
+				location.href = `/member/myPage`;
+			}
+		};
+	
+	
+	</script>
+
+</head>
+<body>
+
+
+<div id="mainContainer" class="container-fluid overflow-auto" style="max-width: 950px">
+	
+	
+	<!-- 네비바 -->
+	<div th:replace="~{common/topnavibar::topNaviBar}"></div>
+	
+	
+	<div class="row">
+		<div class="col">
+			<div class="row mt-4">
+				<div class="col"></div>
+				<div class="col-6">
+					<div class="row justify-content-md-end">
+						<div class="col-auto d-grid pe-0" style="font-size: 1.5em">
+							<!--							<button type="button" class="btn btn-secondary btn-sm">English</button>-->
+						</div>
+						<div class="col-auto d-grid pe-0" style="font-size: 1.5em;">
+							<!--							<button type="button" class="btn btn-secondary btn-sm">상영시간표</button>-->
+						</div>
+						<div class="col-auto d-grid pe-0" style="font-size: 1.5em">
+							<!--							<button type="button" class="btn btn-secondary btn-sm" onclick="resetSelection()">예매 다시하기-->
+							<!--							</button>-->
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row mt-3">
+				<div class="col">
+					<div class="row text-center">
+						<div class="col" style="color: rgb(205, 205, 205); background-color: rgb(38, 38, 38)">
+							예매 완료
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row mt-1" style="background-color: rgb(239, 237, 223)">
+				<div class="col">
+					<div class="row mt-5">
+						<div class="col text-center fw-bold" style="font-size: 2em">
+							예매가 완료되었습니다
+						</div>
+					</div>
+				</div>
+				<div class="row mt-4" style="background-color: rgb(239, 237, 223)">
+					<div class="rowReservationAndAlready row mt-4">
+						<div class="col-2"></div>
+						<div class="col-3">
+							<img class="filmImg" src="#" alt="영화 이미지"
+							     style="max-height: 170px; max-width: 120px; min-height: 170px; min-width: 120px">
+						</div>
+						
+						<div class="col-2 ps-4">
+							<div class="row">
+								<div class="col">
+									영화
+								</div>
+							</div>
+							<div class="row mt-1">
+								<div class="col">
+									원제
+								</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col">
+									상영 일시
+								</div>
+							</div>
+							<div class="row mt-1">
+								<div class="col">
+									상영관
+								</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col">
+									인원
+								</div>
+							</div>
+							<div class="row mt-2">
+								<div class="col">
+									결제 금액
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-5 ps-4">
+							<div class="row">
+								<div id="colNameAndType" class="col">
+									<!--					듄 (2D)-->
+								</div>
+							</div>
+							<div class="row mt-1">
+								<div id="colOriginalNameAndType" class="col">
+									<!--					Dune (2D)-->
+								</div>
+							</div>
+							<div class="row mt-3">
+								<div id="colDataAndTime" class="col">
+									<!--					2025-->
+								</div>
+							</div>
+							<div class="row mt-1">
+								<div id="colTheaterAndBox" class="col">
+									<!--					cgv천호-->
+								</div>
+							</div>
+							
+							<div class="row mt-3">
+								<div id="colSeatCount" class="col">
+									<!--					cgv천호-->
+								</div>
+							</div>
+							<div class="row mt-2">
+								<div id="colTotalPrice" class="col">
+									<!--					cgv천호-->
+								</div>
+							</div>
+							
+						</div>
+						<div class="col-1"></div>
+					</div>
+				</div>
+				<div class="row mt-5">
+					<div class="col-3"></div>
+					<div id="gotoHome" class="col-3 text-center">
+						홈으로
+					</div>
+					<div id="gotoMyPage" class="col-3 text-center">
+						예매 확인/취소
+					</div>
+					<div class="col-3"></div>
+				</div>
+				<div class="row my-4 py-5" style="background-color: rgb(239, 237, 223)">
+					<div class="col" style="font-size: 5em"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.toy.toycinema.people.mapper.PeopleSqlMapper">
+
+    <select id="selectPeopleDtoByPeopleId">
+        select *
+        from people
+        where id = #{id};
+    </select>
+
+    <select id="selectFilmDirectorPeopleDtoByPeopleId">
+        select *
+        from film_director_people
+        where people_id = #{id};
+    </select>
+
+    <select id="selectFilmActorPeopleDtoByPeopleId">
+        select *
+        from film_actor_people
+        where people_id = #{id};
+    </select>
+
+
+</mapper>

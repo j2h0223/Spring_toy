@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.toy.toycinema.film.mapper.FilmSqlMapper">
+
+    <select id="selectFilmDtoByFilmId">
+        select *
+        from film
+        where id = #{id};
+    </select>
+
+    <select id="selectFilmDtoByDirectorPeopleId">
+        select *
+        from film
+        where id = #{filmId};
+    </select>
+
+    <select id="selectFilmDtoByActorPeopleId">
+        select *
+        from film
+        where id = #{filmId};
+    </select>
+
+
+    <select id="selectPeopleDtoActorByFilmId">
+        select people.*
+        from film_actor_people
+                 inner join people on film_actor_people.people_id = people.id
+        where film_actor_people.film_id = #{id};
+    </select>
+
+    <select id="selectPeopleDtoDirectorByFilmId">
+        select people.*
+        from film_director_people
+                 inner join people on film_director_people.people_id = people.id
+        where film_director_people.film_id = #{id};
+    </select>
+
+    <select id="selectGenreDtoFilmGenreByFilmId">
+        select genre.*
+        from film_genre
+                 inner join genre on genre.id = film_genre.genre_id
+        where film_genre.film_id = #{id};
+    </select>
+
+
+    <!-- 검색 추가 예정 -->
+    <select id="selectAllFilm">
+        select *
+        from film
+        limit #{pageIndex}, #{contentsCountInPage};
+    </select>
+
+    <select id="countAllFilm">
+        select count(*)
+        from film
+        <if test="text != null">
+            where film_name like concat('%', #{text}, '%')
+            or original_name like concat('%', #{text}, '%');
+        </if>;
+    </select>
+
+
+</mapper>

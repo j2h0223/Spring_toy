@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	
+	<meta charset="UTF-8">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+	      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+	
+	<title>operatorLoginPage</title>
+
+</head>
+<body>
+
+
+<div class="container-fluid">
+	
+	<div class="row mt-5 align-items-center">
+		<div class="col text-center fw-bold" style="font-size: 2em">관리자 로그인</div>
+	</div>
+	
+	<div class="row mt-4">
+		<div class="col-4"></div>
+		<div class="col-4 text-center">
+			<div class="row "></div>
+			<form action="/operator/loginProcess" method="post">
+				<div class="row">
+					<div class="col">
+						<input type="text" name="accountName" class="form-control" placeholder="ID를 입력해주세요">
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col">
+						<input type="password" name="password" class="form-control" placeholder="Password를 입력해주세요">
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col">
+						<input type="submit" class="form-control btn btn-outline-primary" value="로그인">
+					</div>
+				</div>
+			</form>
+			<div class="row mt-2">
+				<div class="col">
+					<a href="/operator/registerPage" class="form-control btn btn-outline-success" style="text-decoration-line: none">관리자 등록</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-4"></div>
+	</div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

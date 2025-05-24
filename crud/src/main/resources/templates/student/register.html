@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>register</title>
+</head>
+<body>
+
+<div class="container">
+	<form action="/student/register" method="post">
+		<div class="form-group">
+			<div>
+				<label for="name">이름</label>
+				<input type="text" id="name" name="name" placeholder="이름을 입력하세요">
+			</div>
+			<div>
+				<label for="age">나이</label>
+				<input type="number" id="age" name="age" placeholder="나이를 입력하세요">
+			</div>
+			<div>
+				<label for="score">점수</label>
+				<input type="number" id="score" name="score" placeholder="점수를 입력하세요">
+			</div>
+		</div>
+		<button type="submit">등록</button>
+	</form>
+</div>
+
+</body>
+</html>

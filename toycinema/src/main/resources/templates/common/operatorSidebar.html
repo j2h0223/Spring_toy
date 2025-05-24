@@ -1,0 +1,219 @@
+<div th:fragment="operatorSidebar" class="category-sidebar">
+	<!--	<div class="row">-->
+	<!--		<div class="col-2" style="background-color: rgb(40,40,40)">-->
+	<!--			<div class="row">-->
+	<!--				<div class="col-auto mx-auto d-grid">-->
+	<!--					<button type="button" class="btn">-->
+	<!--						<a href="#" style="font-size: 2em ;color: white; text-decoration: none">Theater</a>-->
+	<!--					</button>-->
+	<!--				</div>-->
+	<!--			</div>-->
+	<!--		</div>-->
+	<!--	</div>-->
+	
+	<div class="row">
+		<!-- 왼쪽 베너 -->
+		<div class="col-12" style="background-color: rgb(40,40,40); width: 250px;">
+			
+			<div class="row">
+				<div class="col-auto mx-auto d-grid">
+					<a type="button" href="#" style="color: white; text-decoration: none">
+						<div class="row">
+							<div class="col-auto mx-auto" style="font-size: 2em">
+								Theater
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
+			
+			<div class="row" style="color: white">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-2 text-center border-1 border-top border-secondary">
+					영화관 명
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+			<div class="row" style="color: white">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-2 text-center">
+					관리자 이름
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+			
+			<div class="row">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-3 text-center d-grid border-1 border-top border-secondary">
+					<a type="button" href="#" style="color: white; text-decoration: none">
+						<div class="row">
+							<div class="col-auto mx-auto">
+								<i class="bi bi-grid-fill"></i>
+							</div>
+							<div class="col-auto mx-auto">
+								대시 보드
+							</div>
+						</div>
+					</a>
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+			
+			<div class="row">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-3 text-center d-grid border-1 border-top border-secondary">
+					<a type="button" href="/operator/registerFilm/registerFilmBasicInfoPage"
+					   style="color: white; text-decoration: none">
+						<div class="row">
+							<div class="col-auto mx-auto">
+								<i class="bi bi-film"></i>
+							</div>
+							<div class="col-auto mx-auto">
+								영화 등록
+							</div>
+						</div>
+					</a>
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+			
+			<div class="row">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-3 text-center d-grid ">
+					<a type="button" href="/operator/filmList" style="color: white; text-decoration: none">
+						<div class="row">
+							<div class="col-auto mx-auto">
+								<i class="bi bi-list-stars"></i>
+							</div>
+							<div class="col-auto mx-auto">
+								영화 목록
+							</div>
+						</div>
+					</a>
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+			
+			<div class="row">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-3 text-center d-grid ">
+					<a type="button" href="/operator/restFilmRegister" style="color: white; text-decoration: none">
+						<div class="row">
+							<div class="col-auto mx-auto">
+								<i class="bi bi-pencil"></i>
+							</div>
+							<div class="col-auto mx-auto">
+								영화 수정
+							</div>
+						</div>
+					</a>
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+			
+			<div class="row">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-3 text-center d-grid border-1 border-top border-secondary">
+					<a type="button" href="/operator/theater/registerTheaterPage"
+					   style="color: white; text-decoration: none">
+						<div class="row">
+							<div class="col-auto mx-auto">
+								<i class="bi bi-bank"></i></div>
+							<div class="col-auto mx-auto">
+								극장 등록
+							</div>
+						</div>
+					</a>
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+			
+			<div class="row">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-3 text-center d-grid ">
+					<a type="button" href="" style="color: white; text-decoration: none">
+						<div class="row">
+							<div class="col-auto mx-auto">
+								<i class="bi bi-pencil"></i>
+							</div>
+							<div class="col-auto mx-auto">
+								극장 수정
+							</div>
+						</div>
+					</a>
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+			
+			
+			<div class="row">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-3 text-center d-grid border-1 border-top border-secondary">
+					<a type="button" href="/operator/theater/registerBoxBasicInfoPage"
+					   style="color: white; text-decoration: none">
+						<div class="row">
+							<div class="col-auto mx-auto">
+								<i class="bi bi-box"></i></div>
+							<div class="col-auto mx-auto">
+								관 등록
+							</div>
+						</div>
+					</a>
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+			
+			<div class="row">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-3 text-center d-grid ">
+					<a type="button" href="" style="color: white; text-decoration: none">
+						<div class="row">
+							<div class="col-auto mx-auto">
+								<i class="bi bi-pencil"></i>
+							</div>
+							<div class="col-auto mx-auto">
+								관 수정
+							</div>
+						</div>
+					</a>
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+			
+			
+			<div class="row">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-3 text-center d-grid border-1 border-top border-secondary">
+					<a type="button" href="/operator/selectFilmPlayingTablePage"
+					   style="color: white; text-decoration: none">
+						<div class="row">
+							<div class="col-auto mx-auto">
+								<i class="bi bi-box"></i></div>
+							<div class="col-auto mx-auto">
+								상영 테이블 등록
+							</div>
+						</div>
+					</a>
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+			
+			<div class="row">
+				<!--				<div class="col"></div>-->
+				<div class="col-auto mx-auto py-3 text-center d-grid ">
+					<a type="button" href="" style="color: white; text-decoration: none">
+						<div class="row">
+							<div class="col-auto mx-auto">
+								<i class="bi bi-pencil"></i>
+							</div>
+							<div class="col-auto mx-auto">
+								상영 테이블 수정
+							</div>
+						</div>
+					</a>
+				</div>
+				<!--				<div class="col"></div>-->
+			</div>
+		</div>
+	</div>
+</div>

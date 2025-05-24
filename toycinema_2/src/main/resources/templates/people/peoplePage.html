@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	
+	<meta charset="UTF-8">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+	      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+	
+	<title>peoplePage</title>
+
+</head>
+<body>
+
+
+<div class="container-fluid overflow-auto" style="max-width: 800px">
+	
+	<!-- 네비 바 -->
+	<div th:replace="~{common/topnavibar::topNaviBar}"></div>
+	
+	<div class="row mt-5">
+		
+		<div class="col-auto me-2">
+			<div class="row">
+				<div class="col">
+					<img class="img-fluid" th:src="|/public/img/people/${peopleFilmInfo['peopleDto'].name}.webp|"
+					     style="max-width: 250px; max-height: 400px; min-width: 250px; min-height: 400px;">
+				</div>
+			</div>
+		</div>
+		
+		<div class="col">
+			<div class="row">
+				<div class="col" style="font-size: 2em">
+					<span th:text="${peopleFilmInfo['peopleDto'].name}"></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col" style="font-size: 1.3em">
+					[<span th:text="${peopleFilmInfo['peopleDto'].originalName}"></span>]
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col">
+					출생 : <span th:text="${peopleFilmInfo['peopleDto'].birth}"></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					국적 : <span th:text="${peopleFilmInfo['peopleDto'].country}"></span>
+				</div>
+			</div>
+			
+			<div class="row mt-3">
+				<div class="col-auto border border-1 rounded ms-2">
+					<div class="div">
+						<div class="col">
+							<span><i class="bi bi-heart"></i></span>
+						</div>
+					</div>
+				</div>
+				<div class="col-auto border border-1 rounded ms-2">
+					<div class="div">
+						<div class="col">
+							공유
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	
+	</div>
+	
+	
+	<div class="row mt-5">
+		
+		<div class="col">
+			
+			<div class="div">
+				<div class="col fw-bold" style="font-size: 1.5em">
+					필모그래피
+				</div>
+			</div>
+			
+			<div class="row mt-3" th:if="${not #lists.isEmpty(peopleFilmInfo['directFilmDtoList'])}">
+				<div class="col">
+					<div class="row">
+						<div class="col fw-bold" style="font-size: 1em">
+							연출
+						</div>
+					</div>
+					<div class="row mt-2">
+						<div class="col-auto" th:each="directFilm : ${peopleFilmInfo['directFilmDtoList']}">
+							<a th:href="@{/film/filmDetailsPage/{id}(id=${directFilm.id})}"
+							   style="color: black; text-decoration: underline" class="form-control">
+								<div class="row">
+									<div class="col text-center">
+										<img th:src="|/public/img/poster/${directFilm.filmName}.webp|"
+										     style="max-width: 70px; max-height: 100px;">
+									</div>
+								</div>
+								<div class="row">
+									<div class="col" th:text="${directFilm.filmName}"></div>
+								</div>
+							</a>
+						</div>
+					
+					</div>
+				</div>
+			</div>
+			
+			<!-- 출연 -->
+			<div class="row mt-4" th:if="${not #lists.isEmpty(peopleFilmInfo['actFilmDtoList'])}">
+				<div class="col">
+					<div class="row">
+						<div class="col fw-bold" style="font-size: 1em">
+							출연
+						</div>
+					</div>
+					<div class="row mt-2">
+						<div class="col-auto" th:each="actFilm : ${peopleFilmInfo['actFilmDtoList']}">
+							<a th:href="@{/film/filmDetailsPage/{id}(id=${actFilm.id})}"
+							   style="color: black; text-decoration: underline" class="form-control">
+								<div class="row">
+									<div class="col text-center">
+										<img th:src="|/public/img/poster/${actFilm.filmName}.webp|"
+										     style="max-width: 70px; max-height: 100px;">
+									</div>
+								</div>
+								<div class="row">
+									<div class="col" th:text="${actFilm.filmName}"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+
+</div>
+
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	
+	<meta charset="UTF-8">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+	      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+	
+	<title>reservationFailure</title>
+
+</head>
+<body>
+
+
+<div id="mainContainer" class="container-fluid overflow-auto" style="max-width: 950px">
+	
+	
+	<!-- 네비바 -->
+	<div th:replace="~{common/topnavibar::topNaviBar}"></div>
+	
+	
+	<div class="row">
+		<div class="col">
+			<div class="row mt-4">
+				<div class="col"></div>
+				<div class="col-6">
+					<div class="row justify-content-md-end">
+						<div class="col-auto d-grid pe-0" style="font-size: 1.5em">
+							<!--							<button type="button" class="btn btn-secondary btn-sm">English</button>-->
+						</div>
+						<div class="col-auto d-grid pe-0" style="font-size: 1.5em;">
+							<!--							<button type="button" class="btn btn-secondary btn-sm">상영시간표</button>-->
+						</div>
+						<div class="col-auto d-grid pe-0" style="font-size: 1.5em">
+							<!--							<button type="button" class="btn btn-secondary btn-sm" onclick="resetSelection()">예매 다시하기-->
+							<!--							</button>-->
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row mt-3">
+				<div class="col">
+					<div class="row text-center">
+						<div class="col" style="color: rgb(205, 205, 205); background-color: rgb(38, 38, 38)">
+							예매 실패
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row mt-1" style="background-color: rgb(239, 237, 223)">
+				<div class="col">
+					<div class="row mt-5">
+						<div class="col text-center fw-bold" style="font-size: 2em">
+							결제가 실패했습니다
+						</div>
+					</div>
+					<div class="row mt-1">
+						<div class="col text-center fw-bold" style="font-size: 1.4em">
+							예매 페이지로 돌아가 다시 시도해주세요
+						</div>
+					</div>
+				</div>
+				<div class="row mt-4" style="background-color: rgb(239, 237, 223)">
+					<div class="rowReservationAndAlready row mt-4">
+						<div class="col-2"></div>
+						<div class="col-3">
+<!--							<img class="filmImg" src="#" alt="영화 이미지"-->
+<!--							     style="max-height: 170px; max-width: 120px; min-height: 170px; min-width: 120px">-->
+						</div>
+						
+						<div class="col-2 ps-4">
+							<div class="row">
+								<div class="col" style="font-size: 3em">
+<!--									영화-->
+								</div>
+							</div>
+							<div class="row">
+								<div class="col" style="font-size: 3em">
+<!--									원제-->
+								</div>
+							</div>
+							<div class="row mt-2">
+								<div class="col" style="font-size: 3em">
+<!--									일시-->
+								</div>
+							</div>
+							<div class="row">
+								<div class="col" style="font-size: 3em">
+<!--									상영관/인원-->
+								</div>
+							</div>
+						
+						</div>
+						<div class="col-5 ps-4">
+							<div class="row">
+								<div id="colNameAndType" class="col" style="font-size: 3em">
+									<!--					듄 (2D)-->
+								</div>
+							</div>
+							<div class="row">
+								<div id="colOriginalNameAndType" class="col" style="font-size: 3em">
+									<!--					Dune (2D)-->
+								</div>
+							</div>
+							<div class="row mt-2">
+								<div id="colDataAndTime" class="col" style="font-size: 3em">
+									<!--					2025-->
+								</div>
+							</div>
+							<div class="row">
+								<div id="colTheaterAndBoxAndSeatCount" class="col" style="font-size: 3em">
+									<!--					cgv천호-->
+								</div>
+							</div>
+						
+						</div>
+						<div class="col-1"></div>
+					</div>
+				</div>
+				<div class="row my-4 py-5" style="background-color: rgb(239, 237, 223)">
+					<div class="col" style="font-size: 5em"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

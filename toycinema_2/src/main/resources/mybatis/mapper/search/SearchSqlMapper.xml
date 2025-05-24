@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.toy.toycinema.search.mapper.SearchSqlMapper">
+
+    <select id="selectFilmDtoByText">
+        select *
+        from film
+        where film_name like concat('%', #{text}, '%')
+            or original_name like concat('%', #{text}, '%')
+        limit #{pageIndex}, #{contentsCountInPage};
+    </select>
+
+    <select id="selectPeopleDtoByText">
+        select *
+        from people
+        where name like concat('%', #{text}, '%')
+           or original_name like concat('%', #{text}, '%');
+    </select>
+
+    <select id="selectFilmDtoByGenreText">
+        select film.*
+        from genre join film_genre on genre.id = film_genre.genre_id
+            join film on film_genre.film_id = film.id
+        where genre.genre_name like concat('%', #{text}, '%');
+    </select>
+
+    <select id="countFilmSearched">
+        select count(*)
+        from film
+        where film_name like concat('%', #{text}, '%')
+           or original_name like concat('%', #{text}, '%');
+    </select>
+
+</mapper>

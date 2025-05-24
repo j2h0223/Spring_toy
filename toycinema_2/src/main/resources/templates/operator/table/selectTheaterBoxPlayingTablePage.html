@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	
+	<meta charset="UTF-8">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+	      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+	
+	<title>selectTheaterBoxPlayingTablePage</title>
+
+</head>
+<body>
+
+
+<div class="d-flex" style="height: 100vh;">
+	<div th:replace="~{/common/operatorSidebar::operatorSidebar}"></div>
+	
+	
+	<div class="container-fluid main-content-area px-4">
+		
+		<div class="row border-1 border-bottom">
+			<div class="col-auto ps-4" style="font-size: 2em">
+				Theater
+			</div>
+		</div>
+		
+		<div class="row pt-5 " style="background-color: rgb(238, 240, 247)">
+			<div class="col">
+				<div class="row">
+					<div class="col-auto ps-4" style="font-size: 1.5em;">
+						상영 테이블 등록
+					</div>
+				</div>
+				
+				<div class="row mx-2 mt-4">
+					<div class="row mx-2 mt-4">
+						<div class="col-auto ps-4 text-body-tertiary">
+							상영 영화 선택
+						</div>
+						<div class="col-auto ps-4 text-body-tertiary border-bottom border-2 border-black d-inline-block">
+							상영 영화관 선택
+						</div>
+						<div class="col-auto ps-4 text-body-tertiary ">
+							추가 사항 등록
+						</div>
+						<!--						-->
+						<!--						<div class="col-auto ps-4 text-body-tertiary">-->
+						<!--							예고편 등록-->
+						<!--						</div>-->
+						<!--						<div class="col-auto ps-4 text-body-tertiary">-->
+						<!--							감독/배우 등록-->
+						<!--						</div>-->
+						<!--						<div class="col-auto ps-4 text-body-tertiary">-->
+						<!--							영화 타입 등록-->
+						<!--						</div>-->
+						<!--						<div class="col-auto ps-4 text-body-tertiary">-->
+						<!--							포스터 등록-->
+						<!--						</div>-->
+					</div>
+				</div>
+				
+				<div class="row mx-3 mt-2" style="background-color: white">
+					<form action="/operator/selectTheaterBoxPlayingTableProcess"
+					      method="get">
+						<!--					<form action="/operator/registerFilm/registerFilmPosterProcess"-->
+						
+						<div class="col">
+							
+							<div class="row">
+								<div class="col-auto ps-4 py-3" style="font-size: 1.25em;">
+									상영 영화관 선택
+								</div>
+							</div>
+							
+							<div class="row ps-4 pt-2 border-2 border-top">
+								<div class="col">
+									<div class="row mt-3 align-items-center text-center">
+										<div class="col-1"></div>
+										<div class="col-2 mx-auto">
+											상영 영화
+										</div>
+										<div class="col-5 mx-auto input-group-sm ms-3">
+											<input type="text"
+											       th:value="${session.filmDto.filmName}"
+											       class="form-control rounded-0" disabled
+											       style="background-color: rgb(241, 244, 245)">
+										</div>
+										<div class="col"></div>
+									</div>
+									<div class="row mt-3 align-items-center text-center">
+										<div class="col-1"></div>
+										<div class="col-2 mx-auto">
+											상영 타입
+										</div>
+										<div class="col-5 mx-auto input-group-sm ms-3">
+											<input type="text"
+											       th:value="${session.typeDto.typeName}"
+											       class="form-control rounded-0" disabled
+											       style="background-color: rgb(241, 244, 245)">
+										</div>
+										<div class="col"></div>
+									</div>
+								</div>
+							</div>
+							
+							
+							<div class="row ps-4 pt-2 mt-4 border-2 border-top">
+								<div class="col">
+									
+									<div class="row mt-3 align-items-center text-center">
+										<div class="col-1"></div>
+										<div class="col-2 mx-auto">
+											상영 영화관
+										</div>
+										<div class="col-5 mx-auto input-group-sm ms-3">
+											<div class="row"
+											     th:each="item : ${theaterAndBoxAndTypeInfo}">
+												<div class="col text-start">
+													<input type="radio"
+													       name="selectedValue"
+													       th:value="${item['theaterDto'].id} + '-' + ${item['boxDto'].id}"
+													       th:text="${' ' + item['theaterDto'].name} + ' ' + ${item['boxDto'].name}"/>
+												</div>
+											</div>
+										</div>
+										<div class="col">
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row mt-5">
+								<div class="col pt-3 pb-4"
+								     style="font-size: 1.25em; background-color: rgb(244, 248, 249)">
+									<div class="row ps-4  mt-3 align-items-center text-center">
+										<div class="col-1"></div>
+										<div class="col-2 mx-auto">
+										</div>
+										<div class="col-2 mx-auto d-grid ms-3">
+											<input type="submit" class="form-control rounded-0 btn btn-danger"
+											       value="확인">
+										</div>
+										<div class="col"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					
+					
+					</form>
+				
+				</div>
+			
+			</div>
+		</div>
+		
+		<div class="row mt-5 py-3">
+			<div class="col"></div>
+		
+		</div>
+	
+	</div>
+	
+	<div class="row mt-5 py-1" style="background-color: white">
+		<div class="col"></div>
+	
+	</div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

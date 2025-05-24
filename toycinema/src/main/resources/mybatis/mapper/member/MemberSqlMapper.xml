@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.toy.toycinema.member.mapper.MemberSqlMapper">
+    <insert id="insertMember">
+        insert into member(account_name, password, nickname, email, gender, birth, phone)
+        VALUES (#{accountName}, sha2(concat(#{password}, 'text for salting'), 256), #{nickname}, #{email}, #{gender}, #{birth}, #{phone});
+    </insert>
+
+    <select id="selectMemberByAccountNameAndId">
+        select *
+        from member
+        where account_name = #{accountName} and password = sha2(concat(#{password}, 'text for salting'), 256);
+    </select>
+
+    <select id="selectMemberDtoById">
+        select *
+        from member
+        where id = #{id} and is_critic = false;
+    </select>
+
+    <select id="selectCriticMemberDtoById">
+        select *
+        from member
+        where id = #{id} and is_critic = true;
+    </select>
+
+
+<!--마이페이지-->
+    <select id="selectFilmReservationListByMember">
+        select fr.*
+        from film_reservation fr
+                 join film_playing_table fpt on fr.film_playing_table_id = fpt.id
+        where fr.member_id = #{memberId}
+          and (fpt.date > #{today} or (fpt.date = #{today} and fpt.time >= #{time}))
+        order by fr.id desc;
+    </select>
+
+    <select id="selectAlreadyViewFilmReservationListByMember">
+        <![CDATA[
+        select fr.*
+        from film_reservation fr
+                 join film_playing_table fpt on fr.film_playing_table_id = fpt.id
+        where fr.member_id = #{memberId}
+          and (fpt.date < #{today} or (fpt.date = #{today} and fpt.time <= #{time}))
+        order by fr.id desc;
+        ]]>
+    </select>
+
+    <select id="selectMemberCommentsFilmDto">
+        select *
+        from member_comments_film
+        where member_id = #{memberId} and film_id = #{filmId};
+    </select>
+
+    <select id="selectFilmReservationDtoByFilmReservation">
+        select *
+        from film_reservation
+        where id = #{id};
+    </select>
+
+    <delete id="deleteFilmReservationByFilmReservation">
+        delete
+        from film_reservation
+        where id = #{id};
+    </delete>
+</mapper>

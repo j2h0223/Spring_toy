@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.toy.toycinema.operator.mapper.RestOperatorSqlMapper">
+
+    <select id="selectAllFilmListForRest">
+        select distinct *
+        from film
+        order by id desc;
+    </select>
+
+    <select id="selectDirectorListByFilmId">
+        select distinct *
+        from film_director_people
+        where film_id = #{filmId};
+    </select>
+
+    <select id="selectActorListByFilmId">
+        select distinct *
+        from film_actor_people
+        where film_id = #{filmId};
+    </select>
+
+    <select id="selectPeopleDtoById">
+        select *
+        from people
+        where id = #{id};
+    </select>
+
+    <select id="selectFilmYoutubeListByFilmId">
+        select distinct *
+        from film_youtube
+        where film_id = #{filmId};
+    </select>
+
+    <select id="selectFilmPosterListByFilmId">
+        select distinct *
+        from film_poster
+        where film_id = #{filmId};
+    </select>
+
+    <select id="selectFilmGenreListByFilmId">
+        select distinct *
+        from film_genre
+        where film_id = #{filmId};
+    </select>
+
+    <select id="selectGenreDtoByGenreId">
+        select distinct *
+        from genre
+        where id = #{id};
+    </select>
+
+    <select id="selectFilmTypeListByFilmId">
+        select distinct *
+        from film_type
+        where film_id = #{filmId};
+    </select>
+
+    <select id="selectTypeDtoByTypeID">
+        select distinct *
+        from type
+        where id = #{id};
+    </select>
+
+    <select id="selectFilmPlayingTableListByFilmID">
+        select distinct *
+        from film_playing_table
+        where film_id = #{filmId};
+    </select>
+
+    <select id="selectTheaterListByFilmId">
+        select distinct theater.*
+        from film_playing_table
+                 inner join box_type on film_playing_table.box_type_id = box_type.id
+                 inner join box on box_type.box_id = box.id
+                 inner join theater on box.theater_id = theater.id
+        where film_playing_table.film_id = #{filmId};
+    </select>
+
+    <select id="selectBoxListByFilmId">
+        select distinct box.*
+        from film_playing_table
+                 inner join box_type on film_playing_table.box_type_id = box_type.id
+                 inner join box on box_type.box_id = box.id
+                 inner join theater on box.theater_id = theater.id
+        where film_playing_table.film_id = #{filmId}
+          and theater.id = #{theaterId}
+    </select>
+
+    <select id="selectTypeListByFilmId">
+        select distinct type.*
+        from film_playing_table
+                 inner join box_type on film_playing_table.box_type_id = box_type.id
+                 inner join type on box_type.box_id = type.id
+        where film_playing_table.film_id = #{filmId};
+    </select>
+
+    <select id="selectBoxTypeDto">
+        select distinct box_type.*
+        from film_playing_table
+                 inner join box_type on film_playing_table.box_type_id = box_type.id
+                 inner join box on box_type.box_id = box.id
+        where film_playing_table.film_id = #{filmId}
+          and box.id = #{boxId}
+    </select>
+
+    <!-- 통계 -->
+    <select id="countAudienceByGender">
+        select count(*)
+        from member m
+                 inner join
+             film_reservation fr on m.id = fr.member_id
+                 inner join film_playing_table fpt on fr.film_playing_table_id = fpt.id
+        where m.gender = #{gender} and fpt.film_id = #{filmDto.id};
+    </select>
+
+    <select id="selectPlayingDateListByFilm">
+        select distinct date
+        from film_playing_table
+        where film_id = #{id}
+        ORDER BY date;
+    </select>
+
+    <select id="countAudienceByDate">
+        select count(fr.id)
+        from film_reservation fr
+                 inner join film_playing_table fpt on fr.film_playing_table_id = fpt.id
+        where fpt.film_id = #{filmId} and fpt.date = #{date};
+    </select>
+
+
+    <!-- 영화 등록 -->
+
+
+</mapper>

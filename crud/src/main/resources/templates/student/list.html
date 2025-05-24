@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>list</title>
+</head>
+<body>
+
+<div class="container">
+	<div>
+		<table>
+			<thead>
+			<tr>
+				<th>#</th>
+				<th>이름</th>
+				<th>나이</th>
+				<th>점수</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="student : ${students}">
+				<td th:text="${student.id}"></td>
+				<td th:text="${student.name}"></td>
+				<td th:text="${student.age}"></td>
+				<td th:text="${student.score}"></td>
+			</tr>
+			</tbody>
+		</table>
+		
+		<a th:href="@{/student/back}">
+			<button type="button">뒤로가기</button>
+		</a>
+	
+	</div>
+</div>
+
+</body>
+</html>
